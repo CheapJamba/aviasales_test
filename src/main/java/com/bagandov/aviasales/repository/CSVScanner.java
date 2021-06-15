@@ -1,6 +1,8 @@
 package com.bagandov.aviasales.repository;
 
 import com.bagandov.aviasales.exception.CSVFormatException;
+import com.bagandov.aviasales.exception.EntryNotFoundException;
+import com.bagandov.aviasales.exception.FileNotFoundUncheckedException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,18 +30,16 @@ public class CSVScanner {
                 String[] splits = line.split(",");
                 if (Integer.parseInt(splits[0]) == id) {
                     if (!pattern.matcher(line).matches()) {
-                        throw new CSVFormatException("Строки в файле " + filePath +
-                                " должны соответствовать формату: (" + pattern + ")");
+                        throw new CSVFormatException(filePath, pattern.pattern());
                     }
                     return splits;
                 }
             }
         } catch (FileNotFoundException ex) {
-            throw new RuntimeException("File not found", ex);
+            throw new FileNotFoundUncheckedException("File not found", ex);
         } catch (NumberFormatException ex) {
-            throw new CSVFormatException("Строки в файле " + filePath + " должны соответствовать формату: ("
-                    + pattern + ")", ex);
+            throw new CSVFormatException(filePath, pattern.pattern(), ex);
         }
-        throw new RuntimeException("File doesn't contain string with id: " + id);
+        throw new EntryNotFoundException("File doesn't contain entry with id: " + id);
     }
 }
