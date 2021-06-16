@@ -8,14 +8,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class FlightRepository {
 
-    private SourcesProperties props;
-
-    private CSVScanner scanner;
+    private FlightsCSVScanner scanner;
 
     @Autowired
-    public FlightRepository(SourcesProperties sourcesProperties) {
-        props = sourcesProperties;
-        scanner = new CSVScanner(props.getFlightsSource(), props.getFlightsPattern());
+    public FlightRepository(FlightsCSVScanner scanner) {
+        this.scanner = scanner;
     }
 
     public Flight findFlightById(int targetId) {

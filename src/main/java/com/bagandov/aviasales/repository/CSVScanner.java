@@ -21,8 +21,8 @@ public class CSVScanner {
     }
 
     public String[] getRecordById(int id) {
+        File file = new File(filePath);
         try {
-            File file = new File(filePath);
             Scanner scanner = new Scanner(file);
             scanner.nextLine();
             while (scanner.hasNextLine()) {
@@ -36,7 +36,7 @@ public class CSVScanner {
                 }
             }
         } catch (FileNotFoundException ex) {
-            throw new FileNotFoundUncheckedException("File not found", ex);
+            throw new FileNotFoundUncheckedException("File " + file.getAbsolutePath() + " not found", ex);
         } catch (NumberFormatException ex) {
             throw new CSVFormatException(filePath, pattern.pattern(), ex);
         }
